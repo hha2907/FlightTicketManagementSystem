@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<jdbcDataAdapter class="net.sf.jasperreports.data.jdbc.JdbcDataAdapterImpl">
+  <name>AdapterRpInvoice</name>
+  <classpath>C:\Users\Administrator\Desktop\Coding\JavaProjects\FlightTicketManagementSoftware\lib\mysql-connector-java-8.0.29.jar</classpath>
+  <driver>com.mysql.jdbc.Driver</driver>
+  <username>root</username>
+  <password></password>
+  <url>jdbc:mysql://localhost:3306/sellticketdb</url>
+  <database></database>
+  <savePassword>true</savePassword>
+  <serverAddress></serverAddress>
+</jdbcDataAdapter>

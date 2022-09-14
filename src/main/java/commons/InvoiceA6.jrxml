@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.19.1.final using JasperReports Library version 6.19.1-867c00bf88cd4d784d404379d6c05e1b419e8a4c  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="InvoiceA6" pageWidth="400" pageHeight="420" columnWidth="360" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f78ca9aa-6ad6-4d98-9262-d09bb1334a49">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="src\main\java\commons\DataAdapter.jrdax"/>
+	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#C7CDD1"/>
+			<bottomPen lineWidth="0.5" lineColor="#C7CDD1"/>
+		</box>
+	</style>
+	<style name="Table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#C7CDD1"/>
+			<bottomPen lineWidth="0.5" lineColor="#C7CDD1"/>
+		</box>
+	</style>
+	<style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#C7CDD1"/>
+			<bottomPen lineWidth="0.5" lineColor="#C7CDD1"/>
+		</box>
+	</style>
+	<subDataset name="DataSetInvoice" uuid="5ad85f13-f9ef-4b35-ac95-7c5ee9a7a2c3">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="src\main\java\commons\DataAdapter.jrdax"/>
+		<parameter name="ticketid" class="java.lang.Integer"/>
+		<queryString language="SQL">
+			<![CDATA[SELECT Distinct i.`EstablishedDate`,
+	i.`Total`,
+	i.`Employee_ID`,
+	t.`Flight_ID`,
+	t.`PassengerName`,
+	t.`TicketClass_ID`,
+	f.`Departure_ID`,
+	f.`TakeOffTime`,
+	f.`Destination_ID`,
+	f.`LandingTime`,
+	f.`FlightDate`
+FROM sellticketdb.ticket AS t,
+	sellticketdb.flight AS f,
+	sellticketdb.invoice AS i
+WHERE 
+	 t.`Ticket_ID` = i.`Ticket_ID` 
+	 AND t.flight_id = f.`flight_id` And t.ticket_ID =$P{ticketid}]]>
+		</queryString>
+		<field name="EstablishedDate" class="java.sql.Date">
+			<property name="com.jaspersoft.studio.field.name" value="EstablishedDate"/>
+			<property name="com.jaspersoft.studio.field.label" value="EstablishedDate"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="invoice"/>
+		</field>
+		<field name="Total" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="Total"/>
+			<property name="com.jaspersoft.studio.field.label" value="Total"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="invoice"/>
+		</field>
+		<field name="Employee_ID" class="java.lang.Integer">
+			<property name="com.jaspersoft.studio.field.name" value="Employee_ID"/>
+			<property name="com.jaspersoft.studio.field.label" value="Employee_ID"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="invoice"/>
+		</field>
+		<field name="Flight_ID" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="Flight_ID"/>
+			<property name="com.jaspersoft.studio.field.label" value="Flight_ID"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="ticket"/>
+		</field>
+		<field name="PassengerName" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="PassengerName"/>
+			<property name="com.jaspersoft.studio.field.label" value="PassengerName"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="ticket"/>
+		</field>
+		<field name="TicketClass_ID" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="TicketClass_ID"/>
+			<property name="com.jaspersoft.studio.field.label" value="TicketClass_ID"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="ticket"/>
+		</field>
+		<field name="Departure_ID" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="Departure_ID"/>
+			<property name="com.jaspersoft.studio.field.label" value="Departure_ID"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="flight"/>
+		</field>
+		<field name="TakeOffTime" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="TakeOffTime"/>
+			<property name="com.jaspersoft.studio.field.label" value="TakeOffTime"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="flight"/>
+		</field>
+		<field name="Destination_ID" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="Destination_ID"/>
+			<property name="com.jaspersoft.studio.field.label" value="Destination_ID"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="flight"/>
+		</field>
+		<field name="LandingTime" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="LandingTime"/>
+			<property name="com.jaspersoft.studio.field.label" value="LandingTime"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="flight"/>
+		</field>
+		<field name="FlightDate" class="java.sql.Date">
+			<property name="com.jaspersoft.studio.field.name" value="FlightDate"/>
+			<property name="com.jaspersoft.studio.field.label" value="FlightDate"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="flight"/>
+		</field>
+	</subDataset>
+	<parameter name="ticketid" class="java.lang.Integer"/>
+	<parameter name="idinvoice" class="java.lang.String"/>
+	<parameter name="Now" class="java.lang.String"/>
+	<parameter name="totalMoney" class="java.lang.Long"/>
+	<parameter name="VAT" class="java.lang.Double"/>
+	<parameter name="TotalPayment" class="java.lang.Long"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT 1]]>
+	</queryString>
+	<title>
+		<band height="380" splitType="Stretch">
+			<staticText>
+				<reportElement x="-20" y="-6" width="400" height="40" uuid="90a32349-c773-415d-8d63-973eeb0439bd"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="26" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VIETNAMUIT AIRLINE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-20" y="20" width="400" height="30" uuid="e5920875-5473-472e-99c1-4f76e3bfda96"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="JetBrains Mono Light"/>
+				</textElement>
+				<text><![CDATA[Chap canh bay xa - Ve den tan nha]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-20" y="39" width="400" height="37" uuid="5a90a036-f21f-4197-b59c-0609a94f2408"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PAYMENT INVOICE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-10" y="79" width="100" height="25" uuid="cc79681b-c683-41fa-a036-9a3ab8fce506"/>
+				<textElement textAlignment="Left">
+					<font fontName="Poppins" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Invoice number:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="190" y="81" width="179" height="20" uuid="871dafec-e556-4a3e-b6a9-036aa37b5e18"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font fontName="Poppins" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{idinvoice}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="-10" y="101" width="100" height="25" uuid="65fb7d75-98aa-4bf1-8256-ec7c1fdaf5a4"/>
+				<textElement textAlignment="Left">
+					<font fontName="Poppins" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Invoice date:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="170" y="99" width="199" height="21" uuid="08446bc3-e67c-4437-8b1d-b6bf8b29ed3a"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Poppins" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Now}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement x="-10" y="130" width="380" height="100" uuid="0871eeee-5937-4932-abe2-180832d2c9b9">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="DataSetInvoice" uuid="3d281c38-0e64-40d9-ba82-d990fe57678c">
+						<datasetParameter name="ticketid">
+							<datasetParameterExpression><![CDATA[$P{ticketid}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="59" uuid="49c72acd-d5cf-4139-b0f5-e9395fbde5a6">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="59" height="30" uuid="0dd8113c-8dd8-46a2-8698-42518f7648c6"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Poppins" size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Departure]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="59" height="30" uuid="b95f5827-2588-4b60-afcb-2145665888f7"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="JetBrains Mono" size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{Departure_ID}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="49" uuid="2e86baa8-af6f-4043-a2e1-02d8f660fdd9">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="49" height="30" uuid="dafeb40a-0f90-4198-bab0-20680d3cd843"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Poppins" size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Destination]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="49" height="30" uuid="1bb34551-e654-49c2-8304-655f0141fafe"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="JetBrains Mono" size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{Destination_ID}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="52" uuid="6a3f2949-48ba-4e0f-9b64-31733c37a2bd">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="52" height="30" uuid="cc1db1ed-f5d9-49bd-a319-cf2bdef917f7"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Poppins" size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[FlightDate]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="52" height="30" uuid="cc9bcab5-a034-4cf4-91e0-17b4978fb589"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="JetBrains Mono" size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{FlightDate}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="59" uuid="9e4f3dd7-83f1-46a4-8d63-e9230e1929e0">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="59" height="30" uuid="598921f8-a867-410e-89de-9489b4302d8c"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Poppins" size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[TakeOffTime]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="59" height="30" uuid="eef20b95-cb94-47b2-b082-3dd5c2fff51b"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="JetBrains Mono" size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{TakeOffTime}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="61" uuid="21af49aa-eb84-4f35-864a-3480f77c678f">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="61" height="30" uuid="a265aaae-aac8-4964-900b-79aa548e102f"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Poppins" size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Passenger]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="61" height="30" uuid="ec392920-d7e4-48c9-a7c8-2bb2caaa440e"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="JetBrains Mono" size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{PassengerName}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="49" uuid="8e457983-e668-4adb-a943-f263fd719e37">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column6"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="49" height="30" uuid="77bf5f46-246c-4f64-b674-2b94b1499dfe"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Poppins" size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[TicketClass]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="49" height="30" uuid="1637dba7-0cd8-42b3-b1c3-88ce0b6b9f47"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="JetBrains Mono" size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{TicketClass_ID}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="51" uuid="09eb9c39-ab47-4c2d-bb5c-fea16b9e0d7a">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column7"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="51" height="30" uuid="70ecf35e-b6e2-4c85-9912-899ec75adc14"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Poppins" size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Total]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="51" height="30" uuid="5c8c783f-eb3c-4222-88cb-2afbd25abc1e"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="JetBrains Mono" size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{Total}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<textField>
+				<reportElement x="190" y="270" width="139" height="30" uuid="d783e148-a767-4e3c-984c-a8903c233908"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Poppins" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{VAT}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="-10" y="300" width="100" height="30" uuid="4fe39c5c-fce8-42da-9ab4-bde223cf2803"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Poppins" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total payment:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-19" y="360" width="399" height="20" uuid="ebc795b5-5d5f-4324-952d-dd12ecc1a2c1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="JetBrains Mono" size="8"/>
+				</textElement>
+				<text><![CDATA[Designed by JavaJack]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="189" y="240" width="140" height="30" uuid="f645fe43-bdd9-4d0b-894b-46d639d16d85"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Poppins" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{totalMoney}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="-11" y="240" width="100" height="30" uuid="1890574c-2773-4b9d-a0c5-673650dae71d"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Poppins" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total money:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="189" y="300" width="140" height="30" uuid="80eec754-bb4c-40ed-ab3b-3c120b6b20df"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Poppins" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{TotalPayment}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="-10" y="270" width="100" height="30" uuid="b8875e91-3872-48e4-a004-9705cec8eed4"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Poppins" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VAT(5%): ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-20" y="335" width="400" height="30" uuid="c36a28d6-f2bb-4329-aa62-82904d6e3234"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="JetBrains Mono Light" size="12" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Thank you and see you again!]]></text>
+			</staticText>
+			<line>
+				<reportElement x="-10" y="240" width="379" height="1" uuid="11f43b8c-37c1-4cbe-827c-46800bb90400"/>
+			</line>
+			<line>
+				<reportElement x="-10" y="340" width="379" height="1" uuid="4cb0eb75-be8d-4011-b033-bf07c8895a9a"/>
+			</line>
+			<line>
+				<reportElement x="-10" y="125" width="379" height="1" uuid="bdee9586-4133-47e2-9987-4533f336cd8d"/>
+			</line>
+			<staticText>
+				<reportElement x="340" y="240" width="30" height="30" uuid="4783118c-6834-4394-bdeb-1b9be2f708e4"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Poppins" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VND]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="340" y="270" width="30" height="30" uuid="d8768d22-f5c8-453a-938c-d6e329f26f8e"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Poppins" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VND]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="340" y="300" width="30" height="30" uuid="afb4aab1-75ee-494b-a3ee-7c4cab712a32"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Poppins" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VND]]></text>
+			</staticText>
+		</band>
+	</title>
+</jasperReport>
