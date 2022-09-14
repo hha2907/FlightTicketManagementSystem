@@ -1,0 +1,569 @@
+CREATE DATABASE Aircraft_Sell_Ticketing_Management;
+USE Aircraft_Sell_Ticketing_Management;
+-- drop database aircraft_sell_ticketing_management;
+
+CREATE TABLE AIRCRAFT (
+	Aircraft_ID VARCHAR(20) NOT NULL PRIMARY KEY,
+    NumberOfSeats INT
+);
+
+CREATE TABLE AIRPORT(
+	Departure_ID VARCHAR(10) NOT NULL PRIMARY KEY,
+	AirportName nVARCHAR(100),
+    City_Province nVARCHAR(100)
+);
+
+-- Customer_ID VARCHAR(10) NOT NULL PRIMARY KEY DEFAULT DBO.AUTO_IDCUS()
+CREATE TABLE CUSTOMER(
+	Customer_ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    CustomerName nVARCHAR(50),
+    CitizenIdentify VARCHAR(50) UNIQUE ,
+    DateOfBirth DATE,
+    Gender nVARCHAR(10),
+    Address nVARCHAR(500),
+    Phone VARCHAR(10),
+    isActive INT
+);
+-- DROP TABLE CUSTOMER;
+CREATE TABLE FLIGHT (
+	Flight_ID VARCHAR(10) NOT NULL PRIMARY KEY,
+    Aircraft_ID VARCHAR(20) NOT NULL,
+    Departure_ID VARCHAR(10) NOT NULL,
+    TakeOffTime TIME,
+    Destination_ID VARCHAR(100),
+    LandingTime TIME,
+    FlightDate DATE,
+    NumberOfEconomySeats INT,
+    NumberOfBusinessSeats INT,
+    Status nVARCHAR(50),
+    BasicPrice LONG,
+    isActive INT
+);
+
+CREATE TABLE TICKETCLASS(
+	TicketClass_ID VARCHAR(10) NOT NULL PRIMARY KEY,
+    TicketClassType nVARCHAR(50)
+);
+
+CREATE TABLE EMPLOYEE(
+	Employee_ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    EmployeeName nVARCHAR(50),
+    CitizenIdentify VARCHAR(50) UNIQUE,
+    DateOfBirth DATE,
+    Gender nVARCHAR(10),
+    Address nVARCHAR(500),
+    Phone VARCHAR(10),
+    Role nVARCHAR(100),
+    isActive INT
+);
+
+CREATE TABLE ACCOUNT (
+	Username VARCHAR(100) NOT NULL PRIMARY KEY,
+    Password VARCHAR(50) NOT NULL,
+    Employee_ID INT NOT NULL,
+    Role nVARCHAR(50),
+    isActive INT
+);
+
+CREATE TABLE TICKET(
+	Ticket_ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    Flight_ID VARCHAR(10) NOT NULL,
+    Customer_ID INT NOT NULL,
+    Employee_ID INT NOT NULL,
+    TicketClass_ID VARCHAR(10) NOT NULL,
+    TicketType nVARCHAR(100),
+    PassengerName nVARCHAR(100)
+);
+
+CREATE TABLE INVOICE(
+	Invoice_ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    Employee_ID INT NOT NULL,
+    Customer_ID INT NOT NULL,
+    EstablishedDate DATE,
+    Total LONG
+);
+
+CREATE TABLE INVOICEDETAIL(
+	Invoice_ID INT NOT NULL,
+    Ticket_ID INT NOT NULL,
+    Quantity INT,
+	CONSTRAINT PRIMARY KEY (Invoice_ID, Ticket_ID)
+);	
+
+ALTER TABLE FLIGHT ADD CONSTRAINT FK_AP FOREIGN KEY (Departure_ID) REFERENCES AIRPORT(Departure_ID);
+ALTER TABLE FLIGHT ADD CONSTRAINT FK_FLight_Destination FOREIGN KEY (Destination_ID) REFERENCES AIRPORT(Departure_ID);
+ALTER TABLE FLIGHT ADD CONSTRAINT FK_AC FOREIGN KEY (Aircraft_ID) REFERENCES AIRCRAFT(Aircraft_ID);
+ALTER TABLE TICKET ADD CONSTRAINT FK_FL FOREIGN KEY (Flight_ID) REFERENCES FLIGHT(Flight_ID);
+ALTER TABLE TICKET ADD CONSTRAINT FK_CUS FOREIGN KEY (Customer_ID) REFERENCES CUSTOMER(Customer_ID);
+ALTER TABLE TICKET ADD CONSTRAINT FK_EMP FOREIGN KEY (Employee_ID) REFERENCES EMPLOYEE(Employee_ID);
+ALTER TABLE TICKET ADD CONSTRAINT FK_TKC FOREIGN KEY (TicketClass_ID) REFERENCES TICKETCLASS(TicketClass_ID);
+ALTER TABLE INVOICE ADD CONSTRAINT FK_EMP1 FOREIGN KEY (Employee_ID) REFERENCES EMPLOYEE(Employee_ID);
+ALTER TABLE INVOICE ADD CONSTRAINT FK_CUS1 FOREIGN KEY (Customer_ID) REFERENCES CUSTOMER(Customer_ID);
+ALTER TABLE INVOICEDETAIL ADD CONSTRAINT FK_INV FOREIGN KEY (Invoice_ID) REFERENCES INVOICE(Invoice_ID);
+ALTER TABLE INVOICEDETAIL ADD CONSTRAINT FK_TK FOREIGN KEY (Ticket_ID) REFERENCES TICKET(Ticket_ID);
+ALTER TABLE ACCOUNT ADD CONSTRAINT FK_EMP2 FOREIGN KEY (Employee_ID) REFERENCES EMPLOYEE(Employee_ID);
+
+-- TẠO ID TĂNG TỰ ĐỘNG 
+ALTER TABLE CUSTOMER AUTO_INCREMENT = 10001;
+ALTER TABLE INVOICE AUTO_INCREMENT = 1001;
+ALTER TABLE TICKET AUTO_INCREMENT = 3001;
+
+-- Sân bay Quốc tế Cần Thơ	VVCT/VCA	Cần Thơ
+-- 2	Sân bay Quốc tế Đà Nẵng	VVDN/DAD	Đà Nẵng
+-- 3	Sân bay Quốc tế Cát Bi – Hải Phòng	VVCI/HPH	Hải Phòng
+-- 4	Sân bay Quốc tế Nội Bài – Hà Nội	VVNB/HAN	Hà Nội
+-- 5	Sân bay Quốc tế Tân Sơn Nhất	VVTS/SGN	Thành phố Hồ Chí Minh
+-- 6	Sân bay Quốc tế Cam Ranhq	VVCR/CXR	Khánh Hòa
+-- 7	Sân bay Quốc tế Phú Quốc	VVPQ/PQC	Kiên Giang
+-- 8	Sân bay Quốc tế Vinh – Nghệ An	VVVH/VII	Nghệ An
+-- 9	Sân bay Quốc tế Phú Bài – Huế	VVPB/HUI	Thừa Thiên – Huế
+--  NỘI ĐỊA
+-- 1	Sân bay Côn Đảo	VVCS/VCS	Bà Rịa-Vũng Tàu
+-- 2	Sân bay Nà Sản	VVNS/SQH	Sơn La
+-- 3	Sân bay Phù Cát – Bình Định	VVPC/UIH	Bình Định
+-- 4	Sân bay Cà Mau	VVCM/CAH	Cà Mau
+-- 5	Sân bay Buôn Ma Thuột	VVBM/BMV	Đắk Lắk
+-- 6	Sân bay Điện Biên Phủ	VVDB/DIN	Điện Biên
+-- 9	Sân bay Pleiku – Gia Lai	VVPK/PXU	Gia Lai
+-- 14	Sân bay Rạch Giá – Kiên Giang	VVRG/VKG	Kiên Giang
+-- 16	Sân bay Liên Khương – Đà Lạt	VVDL/DLI	Lâm Đồng
+-- 18	Sân bay Tuy Hòa – Phú Yên	VVTH/TBB	Phú Yên
+-- 19	Sân bay Đồng Hới – Quảng Bình	VVDH/VDH	Quảng Bình
+-- 20	Sân bay Chu Lai – Quảng Nam	VVCA/VCL	Quảng Nam
+-- 21	Sân bay Thọ Xuân – Thanh Hóa	VVTX/THD	Thanh Hóa
+
+-- Quốc Tế 
+INSERT INTO AIRPORT(Departure_ID, AirportName, City_Province) VALUES ('SGN', 'Tân Sơn Nhất International Airport', 'TP Hồ Chí Minh');
+INSERT INTO AIRPORT(Departure_ID, AirportName, City_Province) VALUES ('DAD', 'Đà Nẵng International Airport', 'TP Đà Nẵng');
+INSERT INTO AIRPORT(Departure_ID, AirportName, City_Province) VALUES ('HPH', 'Cát Bi International Airport', 'TP Hải Phòng');
+INSERT INTO AIRPORT(Departure_ID, AirportName, City_Province) VALUES ('HAN', 'Nội Bài International Airport', 'TP Hà Nội');
+INSERT INTO AIRPORT(Departure_ID, AirportName, City_Province) VALUES ('CXR', 'Cam Ranh International Airport', 'Khánh Hòa');
+INSERT INTO AIRPORT(Departure_ID, AirportName, City_Province) VALUES ('VCA', 'Cần Thơ International Airport', 'TP Cần Thơ');
+INSERT INTO AIRPORT(Departure_ID, AirportName, City_Province) VALUES ('VII', 'Vinh International Airport', 'Nghệ An');
+INSERT INTO AIRPORT(Departure_ID, AirportName, City_Province) VALUES ('HUI', 'Phú Bài International Airport', 'Thừa Thiên Huế');
+INSERT INTO AIRPORT(Departure_ID, AirportName, City_Province) VALUES ('PQC', 'Phú Quốc International Airport', 'Kiên Giang');
+-- Nội địa 
+INSERT INTO AIRPORT(Departure_ID, AirportName, City_Province) VALUES ('VCS', 'Côn Đảo Airport', 'Bà Rịa - Vũng Tàu');
+INSERT INTO AIRPORT(Departure_ID, AirportName, City_Province) VALUES ('SQH', 'Nà Sản Airport', 'Sơn La');
+INSERT INTO AIRPORT(Departure_ID, AirportName, City_Province) VALUES ('UIH', 'Phù Cát Airport', 'Bình Định');
+INSERT INTO AIRPORT(Departure_ID, AirportName, City_Province) VALUES ('CAH', 'Cà Mau Airport', 'Cà Mau');
+INSERT INTO AIRPORT(Departure_ID, AirportName, City_Province) VALUES ('BMV', 'Buôn Ma Thuộc Airport', 'Đắk Lắk');
+INSERT INTO AIRPORT(Departure_ID, AirportName, City_Province) VALUES ('DIN', 'Điện Biên Phủ Airport', 'Điện Biên');
+INSERT INTO AIRPORT(Departure_ID, AirportName, City_Province) VALUES ('PXU', 'Pleiku Airport', 'Gia Lai');
+INSERT INTO AIRPORT(Departure_ID, AirportName, City_Province) VALUES ('VKG', 'Rạch Giá Airport', 'Kiên Giang');
+INSERT INTO AIRPORT(Departure_ID, AirportName, City_Province) VALUES ('DLI', 'Liên Khương Airport', 'Lâm Đồng');
+INSERT INTO AIRPORT(Departure_ID, AirportName, City_Province) VALUES ('TBB', 'Tuy Hòa Airport', 'Phú Yên');
+INSERT INTO AIRPORT(Departure_ID, AirportName, City_Province) VALUES ('VDH', 'Đồng Hới Airport', 'Quảng Bình');
+INSERT INTO AIRPORT(Departure_ID, AirportName, City_Province) VALUES ('VCL', 'Chu Lai Airport', 'Quảng Nam');
+INSERT INTO AIRPORT(Departure_ID, AirportName, City_Province) VALUES ('THD', 'Thọ Xuân Airport', 'Thanh Hóa');
+
+-- INSERT INTO AIRCRAFT(Aircraft_ID, NumberOfSeats) VALUES ('Boeing B777', 325); (35, 290)
+-- INSERT INTO AIRCRAFT(Aircraft_ID, NumberOfSeats) VALUES ('Boeing B787', 311); (28, 283)
+-- INSERT INTO AIRCRAFT(Aircraft_ID, NumberOfSeats) VALUES ('Airbus A350', 305); (65,240)
+-- INSERT INTO AIRCRAFT(Aircraft_ID, NumberOfSeats) VALUES ('Airbus A359', 305); (65, 240)
+-- INSERT INTO AIRCRAFT(Aircraft_ID, NumberOfSeats) VALUES ('Airbus A330', 280); (24, 256)
+-- INSERT INTO AIRCRAFT(Aircraft_ID, NumberOfSeats) VALUES ('Airbus A321', 184); (16, 168)
+-- INSERT INTO AIRCRAFT(Aircraft_ID, NumberOfSeats) VALUES ('Airbus A320', 184); (16, 168)
+-- INSERT INTO AIRCRAFT(Aircraft_ID, NumberOfSeats) VALUES ('AT7', 68); (0,68)
+
+INSERT INTO AIRCRAFT(Aircraft_ID, NumberOfSeats) VALUES ('Boeing B777', 325); 
+INSERT INTO AIRCRAFT(Aircraft_ID, NumberOfSeats) VALUES ('Boeing B787', 311); 
+INSERT INTO AIRCRAFT(Aircraft_ID, NumberOfSeats) VALUES ('Airbus A350', 305); 
+INSERT INTO AIRCRAFT(Aircraft_ID, NumberOfSeats) VALUES ('Airbus A359', 305); 
+INSERT INTO AIRCRAFT(Aircraft_ID, NumberOfSeats) VALUES ('Airbus A330', 280); 
+INSERT INTO AIRCRAFT(Aircraft_ID, NumberOfSeats) VALUES ('Airbus A321', 184); 
+INSERT INTO AIRCRAFT(Aircraft_ID, NumberOfSeats) VALUES ('Airbus A320', 184); 
+INSERT INTO AIRCRAFT(Aircraft_ID, NumberOfSeats) VALUES ('AT7', 68);
+
+-- CUSTOMER CÓ NHẬP ID
+-- INSERT INTO CUSTOMER(Customer_ID, CustomerName, CitizenIdentify, DateOfBirth, Gender, Address, Phone) 
+-- VALUES (10001, 'Nguyễn Văn Vở', '074203001234', '1990/12/9', 'Nam', 'Bình Định', '0968465221');
+-- INSERT INTO CUSTOMER(Customer_ID, CustomerName, CitizenIdentify, DateOfBirth, Gender, Address, Phone) 
+-- VALUES (10002, 'Nguyễn Văn Chương', '074303004321', '1995/6/9', 'Nam', 'TP Hồ Chí Minh', '0968468921');
+-- INSERT INTO CUSTOMER(Customer_ID, CustomerName, CitizenIdentify, DateOfBirth, Gender, Address, Phone) 
+-- VALUES (10003, 'Nguyễn Thị Nở', '074403005678', '1986/8/21', 'Nữ', 'Thái Bình', '0368465821');
+-- INSERT INTO CUSTOMER(Customer_ID, CustomerName, CitizenIdentify, DateOfBirth, Gender, Address, Phone) 
+-- VALUES (10004, 'Hồ Cẩm Đào Hoa', '074503008765', '1999/6/19', 'Nữ', 'Lào Cai', '0968465221');
+-- INSERT INTO CUSTOMER(Customer_ID, CustomerName, CitizenIdentify, DateOfBirth, Gender, Address, Phone) 
+-- VALUES (10005, 'Lê Bá Đạo', '074613001324', '1980/5/1', 'Nam', 'Bình Dương', '0367589813');
+-- INSERT INTO CUSTOMER(Customer_ID, CustomerName, CitizenIdentify, DateOfBirth, Gender, Address, Phone) 
+-- VALUES (10006, 'Trần Thị Tuyết Mai', '074706004258', '2000/2/2', 'Nữ', 'Hà Nội', '0968465221');
+-- INSERT INTO CUSTOMER(Customer_ID, CustomerName, CitizenIdentify, DateOfBirth, Gender, Address, Phone) 
+-- VALUES (10007, 'Nguyễn Phong Phú', '074908006247', '1990/12/9', 'Nam', 'Hải Phòng', '0328976543');
+-- INSERT INTO CUSTOMER(Customer_ID, CustomerName, CitizenIdentify, DateOfBirth, Gender, Address, Phone) 
+-- VALUES (10008, 'Bùi Tiến Dũng', '075210001607', '1997/2/28', 'Nam', 'Thanh Hóa', '0969999637');
+-- INSERT INTO CUSTOMER(Customer_ID, CustomerName, CitizenIdentify, DateOfBirth, Gender, Address, Phone) 
+-- VALUES (10009, 'Đặng Văn Lâm', '074923011589', '1993/8/13', 'Nam', 'Hải Phòng', '0963784529');
+-- INSERT INTO CUSTOMER(Customer_ID, CustomerName, CitizenIdentify, DateOfBirth, Gender, Address, Phone)
+-- VALUES (10010, 'Bùi Đức Duy', '074211100104', '2002/10/11', 'Nam', 'Bình Dương', '0969927673');
+
+-- UPDATE CUSTOMER TỰ ĐỘNG TẠO ID 
+INSERT INTO CUSTOMER(CustomerName, CitizenIdentify, DateOfBirth, Gender, Address, Phone, isActive) 
+VALUES ('Nguyễn Văn Vở', '074203001234', '1990/12/9', 'Male', 'Bình Định', '0968465221', 1);
+INSERT INTO CUSTOMER(CustomerName, CitizenIdentify, DateOfBirth, Gender, Address, Phone, isActive) 
+VALUES ('Nguyễn Văn Chương', '074303004321', '1995/6/9', 'Male', 'TP Hồ Chí Minh', '0968468921', 1);
+INSERT INTO CUSTOMER(CustomerName, CitizenIdentify, DateOfBirth, Gender, Address, Phone, isActive) 
+VALUES ('Nguyễn Thị Nở', '074403005678', '1986/8/21', 'Female', 'Thái Bình', '0368465821', 1);
+INSERT INTO CUSTOMER(CustomerName, CitizenIdentify, DateOfBirth, Gender, Address, Phone, isActive) 
+VALUES ('Hồ Cẩm Đào Hoa', '074503008765', '1999/6/19', 'Female', 'Lào Cai', '0968465221', 1);
+INSERT INTO CUSTOMER(CustomerName, CitizenIdentify, DateOfBirth, Gender, Address, Phone, isActive) 
+VALUES ('Lê Bá Đạo', '074613001324', '1980/5/1', 'Male', 'Bình Dương', '0367589813', 1);
+INSERT INTO CUSTOMER(CustomerName, CitizenIdentify, DateOfBirth, Gender, Address, Phone, isActive) 
+VALUES ('Trần Thị Tuyết Mai', '074706004258', '2000/2/2', 'Female', 'Hà Nội', '0968465221', 1);
+INSERT INTO CUSTOMER(CustomerName, CitizenIdentify, DateOfBirth, Gender, Address, Phone, isActive) 
+VALUES ('Nguyễn Phong Phú', '074908006247', '1990/12/9', 'Male', 'Hải Phòng', '0328976543', 1);
+INSERT INTO CUSTOMER(CustomerName, CitizenIdentify, DateOfBirth, Gender, Address, Phone, isActive) 
+VALUES ('Bùi Tiến Dũng', '075210001607', '1997/2/28', 'Male', 'Thanh Hóa', '0969999637', 1);
+INSERT INTO CUSTOMER(CustomerName, CitizenIdentify, DateOfBirth, Gender, Address, Phone, isActive) 
+VALUES ('Đặng Văn Lâm', '074923011589', '1993/8/13', 'Male', 'Hải Phòng', '0963784529', 1);
+INSERT INTO CUSTOMER(CustomerName, CitizenIdentify, DateOfBirth, Gender, Address, Phone, isActive)
+VALUES ('Bùi Đức Duy', '074211100104', '2002/10/11', 'Male', 'Bình Dương', '0969927673', 1);
+
+-- EMPLOYEE CÓ NHẬP ID
+-- INSERT INTO EMPLOYEE(Employee_ID, EmployeeName, CitizenIdentify, DateOfBirth, Gender, Address, Phone, Role) 
+-- VALUES (1, 'Bùi Duy Thiện', '074201000147', '2001/6/17', 'Male', 'Đắk Lắk', '0357748844', 'Management Staff');
+-- INSERT INTO EMPLOYEE(Employee_ID, EmployeeName, CitizenIdentify, DateOfBirth, Gender, Address, Phone, Role) 
+-- VALUES (2, 'Bùi Đức Duy', '074202000258', '2002/10/11', 'Male', 'Bình Dương', '0969927673', 'Management Staff');
+-- INSERT INTO EMPLOYEE(Employee_ID, EmployeeName, CitizenIdentify, DateOfBirth, Gender, Address, Phone, Role) 
+-- VALUES (3, 'Đặng Hoàng Hà', '074203000369', '2002/2/2', 'Male', 'Quảng Ninh', '0968463221', 'Ticket Seller');
+-- INSERT INTO EMPLOYEE(Employee_ID, EmployeeName, CitizenIdentify, DateOfBirth, Gender, Address, Phone, Role) 
+-- VALUES (4, 'Hồ Bảo An', '074204000741', '2002/2/27', 'Male', 'Khánh Hòa', '0767812891', 'Ticket Seller');
+-- INSERT INTO EMPLOYEE(Employee_ID, EmployeeName, CitizenIdentify, DateOfBirth, Gender, Address, Phone, Role) 
+-- VALUES (5, 'Dương Thanh Thủy', '074205000852', '2002/5/7', 'Female', 'TP Hồ Chí Minh', '0797590502', 'Ticket Seller');
+-- INSERT INTO EMPLOYEE(Employee_ID, EmployeeName, CitizenIdentify, DateOfBirth, Gender, Address, Phone, Role) 
+-- VALUES (6, 'Trần Anh Huy', '074206000963', '2002/9/27', 'Male', 'Bình Dương', '0916430073', 'Ticket Seller');
+-- INSERT INTO EMPLOYEE(Employee_ID, EmployeeName, CitizenIdentify, DateOfBirth, Gender, Address, Phone, Role) 
+-- VALUES (7, 'Nguyễn Thị Thảo Hồng', '074207001406', '2002/6/14', 'Female', 'Quảng Nam', '0334586738', 'Ticket Seller');
+
+-- UPDATE EMPLOYEE TỰ ĐỘNG TẠO ID
+INSERT INTO EMPLOYEE(EmployeeName, CitizenIdentify, DateOfBirth, Gender, Address, Phone, Role, isActive) 
+VALUES ('Bùi Duy Thiện', '074201000147', '2001/6/17', 'Male', 'Đắk Lắk', '0357748844', 'Management Staff', 1);
+INSERT INTO EMPLOYEE(EmployeeName, CitizenIdentify, DateOfBirth, Gender, Address, Phone, Role, isActive) 
+VALUES ('Bùi Đức Duy', '074202000258', '2002/10/11', 'Male', 'Bình Dương', '0969927673', 'Management Staff', 1);
+INSERT INTO EMPLOYEE(EmployeeName, CitizenIdentify, DateOfBirth, Gender, Address, Phone, Role, isActive) 
+VALUES ('Đặng Hoàng Hà', '074203000369', '2002/2/2', 'Male', 'Quảng Ninh', '0968463221', 'Ticket Seller', 1);
+INSERT INTO EMPLOYEE(EmployeeName, CitizenIdentify, DateOfBirth, Gender, Address, Phone, Role, isActive) 
+VALUES ('Hồ Bảo An', '074204000741', '2002/2/27', 'Male', 'Khánh Hòa', '0767812891', 'Ticket Seller', 1);
+INSERT INTO EMPLOYEE(EmployeeName, CitizenIdentify, DateOfBirth, Gender, Address, Phone, Role, isActive) 
+VALUES ('Dương Thanh Thủy', '074205000852', '2002/5/7', 'Female', 'TP Hồ Chí Minh', '0797590502', 'Ticket Seller', 1);
+INSERT INTO EMPLOYEE(EmployeeName, CitizenIdentify, DateOfBirth, Gender, Address, Phone, Role, isActive) 
+VALUES ('Trần Anh Huy', '074206000963', '2002/9/27', 'Male', 'Bình Dương', '0916430073', 'Ticket Seller', 1);
+INSERT INTO EMPLOYEE(EmployeeName, CitizenIdentify, DateOfBirth, Gender, Address, Phone, Role, isActive) 
+VALUES ('Nguyễn Thị Thảo Hồng', '074207001406', '2002/6/14', 'Female', 'Quảng Nam', '0334586738', 'Ticket Seller', 1);
+
+INSERT INTO TICKETCLASS(TicketClass_ID, TicketClassType) VALUES ('BC', 'Business class');
+INSERT INTO TICKETCLASS(TicketClass_ID, TicketClassType) VALUES ('EC', 'Economy class');
+
+-- OLD FLIGHT 
+-- INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, Status) 
+-- VALUES ('VN1464', 'Airbus A320', '2022/5/20', 'SGN', '16:05', 'VCL', '17:30', 'Waiting');
+-- INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, Status) 
+-- VALUES ('VN6280', 'Airbus A321', '2022/5/21', 'SGN', '6:40', 'VCL', '8:05', 'On time');
+-- INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, Status) 
+-- VALUES ('VN6010', 'Airbus A320', '2022/5/22', 'SGN', '5:55', 'HAN', '7:10', 'Waiting');
+-- INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, Status) 
+-- VALUES ('VN240', 'Boeing B787', '2022/5/22', 'SGN', '7:00', 'HAN', '9:10', 'Waiting');
+-- INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, Status) 
+-- VALUES ('VN1370', 'Airbus A321', '2022/5/22', 'SGN', '6:00', 'HUI', '7:30', 'Waiting');
+-- INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, Status) 
+-- VALUES ('VN1376', 'Airbus A321', '2022/5/22', 'SGN', '12:05', 'HUI', '12:55', 'Waiting');
+-- INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, Status) 
+-- VALUES ('VN1414', 'Airbus A321', '2022/5/22', 'SGN', '6:20', 'BMV', '7:25', 'Waiting');
+-- INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, Status) 
+-- VALUES ('VN1341', 'Airbus A321', '2022/5/24', 'SGN', '20:15', 'CXR', '21:30', 'Waiting');
+-- INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, Status) 
+-- VALUES ('VN1379', 'Airbus A321', '2022/5/25', 'HUI', '19:00', 'SGN', '20:40', 'Waiting');
+-- INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, Status) 
+-- VALUES ('VN1591', 'Airbus A321', '2022/5/25', 'HAN', '13:5', 'VDH', '14:25', 'Delayed');
+-- INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, Status) 
+-- VALUES ('VN6250', 'Airbus A321', '2022/5/25', 'BMV', '17:40', 'SGN', '18:40', 'Waiting');
+-- INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, Status) 
+-- VALUES ('VN1386', 'Airbus A321', '2022/5/25', 'SGN', '18:10', 'DLI', '19:15', 'Waiting');
+-- INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, Status) 
+-- VALUES ('VN6220', 'Airbus A320', '2022/5/25', 'SGN', '11:05', 'DLI', '12:20', 'Waiting');
+-- INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, Status) 
+-- VALUES ('VN212', 'Airbus A359', '2022/5/26', 'SGN', '16:45', 'CXR', '18:00', 'Waiting');
+-- INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, Status) 
+-- VALUES ('VN1612', 'Airbus A321', '2022/5/26', 'PXU', '14:30', 'HAN', '16:05', 'On air');
+-- INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, Status) 
+-- VALUES ('VN1891', 'AT7', '2022/5/29', 'SGN', '5:20', 'VCS', '6:25', 'Waiting');
+-- INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, Status) 
+-- VALUES ('VN8204', 'AT7', '2022/5/29', 'HAN', '13:50', 'DIN', '15:10', 'Waiting');
+-- INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, Status) 
+-- VALUES ('VN1277', 'Airbus A321', '2022/5/29', 'THD', '14:10', 'SGN', '16:20', 'Waiting');
+-- INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, Status) 
+-- VALUES ('VN6515', 'Airbus A320', '2022/6/1', 'SGN', '8:45', 'PQC', '10:15', 'Waiting');
+-- INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, Status) 
+-- VALUES ('VN1660', 'Airbus A321', '2022/6/7', 'SGN', '14:05', 'TBB', '15:25', 'Waiting');
+-- INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, Status) 
+-- VALUES ('VN1530', 'Airbus A321', '2022/6/7', 'CXR', '9:30', 'VII', '11:10', 'On time');
+-- INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, Status) 
+-- VALUES ('VN8063', 'AT7', '2022/6/21', 'HUI', '8:10', 'VCS', '12:35', 'Waiting');
+-- INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, Status) 
+-- VALUES ('VN1371', 'Airbus A321', '2022/6/21', 'HUI', '8:10', 'VCS', '13:00', 'Wating');
+-- INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, Status) 
+-- VALUES ('VN1177', 'Airbus A321', '2022/6/21', 'HPH', '16:15', 'SGN', '18:30', 'Waiting');
+
+-- UPDATE FLIGHT 
+INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, NumberOfEconomySeats, NumberOfBusinessSeats, Status, BasicPrice, isActive) 
+VALUES ('VN1464', 'Airbus A320', '2022/5/20', 'SGN', '16:05', 'VCL', '17:30', 160, 6, 'Waiting', 1200000, 1);
+INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, NumberOfEconomySeats, NumberOfBusinessSeats, Status, BasicPrice, isActive) 
+VALUES ('VN6280', 'Airbus A321', '2022/5/21', 'SGN', '6:40', 'VCL', '8:05', 50, 5, 'On air', 1000000, 1);
+INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, NumberOfEconomySeats, NumberOfBusinessSeats, Status, BasicPrice, isActive) 
+VALUES ('VN6010', 'Airbus A320', '2022/5/22', 'SGN', '5:55', 'HAN', '7:10', 100, 6, 'Waiting', 2000000, 1);
+INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, NumberOfEconomySeats, NumberOfBusinessSeats, Status, BasicPrice, isActive) 
+VALUES ('VN240', 'Boeing B787', '2022/5/22', 'SGN', '7:00', 'HAN', '9:10', 183, 10, 'Waiting', 2500000, 1);
+INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, NumberOfEconomySeats, NumberOfBusinessSeats, Status, BasicPrice, isActive) 
+VALUES ('VN1370', 'Airbus A321', '2022/5/22', 'SGN', '6:00', 'HUI', '7:30', 80, 10, 'Waiting', 1400000, 1);
+INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, NumberOfEconomySeats, NumberOfBusinessSeats, Status, BasicPrice, isActive) 
+VALUES ('VN1376', 'Airbus A321', '2022/5/22', 'SGN', '12:05', 'HUI', '12:55', 50, 9, 'Waiting', 1200000, 1);
+INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, NumberOfEconomySeats, NumberOfBusinessSeats, Status, BasicPrice, isActive) 
+VALUES ('VN1414', 'Airbus A321', '2022/5/22', 'SGN', '6:20', 'BMV', '7:25', 68, 10, 'Waiting', 1000000, 1);
+INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, NumberOfEconomySeats, NumberOfBusinessSeats, Status, BasicPrice, isActive) 
+VALUES ('VN1341', 'Airbus A321', '2022/5/24', 'SGN', '20:15', 'CXR', '21:30', 60, 3, 'Waiting', 900000, 1);
+INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, NumberOfEconomySeats, NumberOfBusinessSeats, Status, BasicPrice, isActive) 
+VALUES ('VN1379', 'Airbus A321', '2022/5/25', 'HUI', '19:00', 'SGN', '20:40', 50, 1, 'Waiting', 1300000, 1);
+INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, NumberOfEconomySeats, NumberOfBusinessSeats, Status, BasicPrice, isActive) 
+VALUES ('VN1591', 'Airbus A321', '2022/5/25', 'HAN', '13:5', 'VDH', '14:25', 150, 12, 'Delayed', 1100000, 1);
+INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, NumberOfEconomySeats, NumberOfBusinessSeats, Status, BasicPrice, isActive) 
+VALUES ('VN6250', 'Airbus A321', '2022/5/25', 'BMV', '17:40', 'SGN', '18:40', 100, 8, 'Waiting', 800000, 1);
+INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, NumberOfEconomySeats, NumberOfBusinessSeats, Status, BasicPrice, isActive) 
+VALUES ('VN1386', 'Airbus A321', '2022/5/25', 'SGN', '18:10', 'DLI', '19:15', 10, 1, 'Waiting', 1200000, 1);
+INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, NumberOfEconomySeats, NumberOfBusinessSeats, Status, BasicPrice, isActive) 
+VALUES ('VN6220', 'Airbus A320', '2022/5/25', 'SGN', '11:05', 'DLI', '12:20', 30, 3, 'Waiting', 1100000, 1);
+INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, NumberOfEconomySeats, NumberOfBusinessSeats, Status, BasicPrice, isActive) 
+VALUES ('VN212', 'Airbus A359', '2022/5/26', 'SGN', '16:45', 'CXR', '18:00', 70, 4, 'Waiting', 1100000, 1);
+INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, NumberOfEconomySeats, NumberOfBusinessSeats, Status, BasicPrice, isActive) 
+VALUES ('VN1612', 'Airbus A321', '2022/5/26', 'PXU', '14:30', 'HAN', '16:05', 80, 6, 'On air', 1300000, 1);
+INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, NumberOfEconomySeats, NumberOfBusinessSeats, Status, BasicPrice, isActive) 
+VALUES ('VN1891', 'AT7', '2022/5/29', 'SGN', '5:20', 'VCS', '6:25', 30, 0, 'Waiting', 3500000, 1);
+INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, NumberOfEconomySeats, NumberOfBusinessSeats, Status, BasicPrice, isActive) 
+VALUES ('VN8204', 'AT7', '2022/5/29', 'HAN', '13:50', 'DIN', '15:10', 18, 0, 'Waiting', 860000, 1);
+INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, NumberOfEconomySeats, NumberOfBusinessSeats, Status, BasicPrice, isActive) 
+VALUES ('VN1277', 'Airbus A321', '2022/5/29', 'THD', '14:10', 'SGN', '16:20', 130, 13, 'Waiting', 1800000, 1);
+INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, NumberOfEconomySeats, NumberOfBusinessSeats, Status, BasicPrice, isActive) 
+VALUES ('VN6515', 'Airbus A320', '2022/6/1', 'SGN', '8:45', 'PQC', '10:15', 78, 2, 'Waiting', 1300000, 1);
+INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, NumberOfEconomySeats, NumberOfBusinessSeats, Status, BasicPrice, isActive) 
+VALUES ('VN1660', 'Airbus A321', '2022/6/7', 'SGN', '14:05', 'TBB', '15:25', 123, 5, 'Waiting', 960000, 1);
+INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, NumberOfEconomySeats, NumberOfBusinessSeats, Status, BasicPrice, isActive) 
+VALUES ('VN1530', 'Airbus A321', '2022/6/7', 'CXR', '9:30', 'VII', '11:10', 100, 11, 'Delayed', 990000, 1);
+INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, NumberOfEconomySeats, NumberOfBusinessSeats, Status, BasicPrice, isActive) 
+VALUES ('VN8063', 'AT7', '2022/6/21', 'HUI', '8:10', 'VCS', '12:35', 38, 0, 'Waiting', 3000000, 1);
+INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, NumberOfEconomySeats, NumberOfBusinessSeats, Status, BasicPrice, isActive) 
+VALUES ('VN1371', 'Airbus A321', '2022/6/21', 'HUI', '8:10', 'VCS', '13:00', 111, 1, 'Wating', 3000000, 1);
+INSERT INTO FLIGHT(Flight_ID, Aircraft_ID, FlightDate, Departure_ID, TakeOffTime, Destination_ID, LandingTime, NumberOfEconomySeats, NumberOfBusinessSeats, Status, BasicPrice, isActive) 
+VALUES ('VN1177', 'Airbus A321', '2022/6/21', 'HPH', '16:15', 'SGN', '18:30', 7, 88, 'Waiting', 1900000, 1);
+
+INSERT INTO ACCOUNT(Username, Password, Employee_ID, Role, isActive) 
+VALUES ('msbuiduythien', '123456', 1, 'Management Staff', 1);
+INSERT INTO ACCOUNT(Username, Password, Employee_ID, Role, isActive) 
+VALUES ('msbuiducduy', '123456', 2, 'Management Staff', 1);
+INSERT INTO ACCOUNT(Username, Password, Employee_ID, Role, isActive) 
+VALUES ('tsdanghoangha', '123456', 3, 'Ticket Seller', 1);
+INSERT INTO ACCOUNT(Username, Password, Employee_ID, Role, isActive) 
+VALUES ('tshobaoan', '123456', 4, 'Ticket Seller', 1);
+INSERT INTO ACCOUNT(Username, Password, Employee_ID, Role, isActive) 
+VALUES ('tsduongthanhthuy', '123456', 5, 'Ticket Seller', 1);
+INSERT INTO ACCOUNT(Username, Password, Employee_ID, Role, isActive) 
+VALUES ('tstrananhhuy', '123456', 6, 'Ticket Seller', 1);
+INSERT INTO ACCOUNT(Username, Password, Employee_ID, Role, isActive) 
+VALUES ('tsngthithaohong', '123456', 7, 'Ticket Seller', 1);
+
+-- UPDATE TICKET CÓ NHẬP ID
+-- INSERT INTO TICKET(Ticket_ID, Flight_ID, Customer_ID, Employee_ID, TicketClass_ID, TicketType, PassengerName)
+-- VALUES (3001, 'VN1464', 10001, 3, 'BC', 'One Way', 'Nguyễn Văn Vở');
+-- INSERT INTO TICKET(Ticket_ID, Flight_ID, Customer_ID, Employee_ID, TicketClass_ID, TicketType, PassengerName)
+-- VALUES (3002, 'VN1464', 10002, 3, 'EC', 'Round Trip', 'Nguyễn Văn Chương');
+-- INSERT INTO TICKET(Ticket_ID, Flight_ID, Customer_ID, Employee_ID, TicketClass_ID, TicketType, PassengerName)
+-- VALUES (3003, 'VN1376', 10003, 3, 'EC', 'One Way', 'Nguyễn Thị Nở');
+-- INSERT INTO TICKET(Ticket_ID, Flight_ID, Customer_ID, Employee_ID, TicketClass_ID, TicketType, PassengerName)
+-- VALUES (3004, 'VN1414', 10004, 5, 'EC', 'Round Trip', 'Hồ Cẩm Đào Hoa');
+-- INSERT INTO TICKET(Ticket_ID, Flight_ID, Customer_ID, Employee_ID, TicketClass_ID, TicketType, PassengerName)
+-- VALUES (3005, 'VN212', 10005, 6, 'BC', 'One Way', 'Lê Bá Đạo');
+-- INSERT INTO TICKET(Ticket_ID, Flight_ID, Customer_ID, Employee_ID, TicketClass_ID, TicketType, PassengerName)
+-- VALUES (3006, 'VN8204', 10006, 6, 'EC', 'Round Trip', 'Trần Thị Tuyết Mai');
+-- INSERT INTO TICKET(Ticket_ID, Flight_ID, Customer_ID, Employee_ID, TicketClass_ID, TicketType, PassengerName)
+-- VALUES (3007, 'VN1660', 10007, 4, 'EC', 'One Way', 'Nguyễn Phong Phú');
+-- INSERT INTO TICKET(Ticket_ID, Flight_ID, Customer_ID, Employee_ID, TicketClass_ID, TicketType, PassengerName)
+-- VALUES (3008, 'VN1277', 10008, 4, 'EC', 'Round Trip', 'Bùi Tiến Dũng');
+-- INSERT INTO TICKET(Ticket_ID, Flight_ID, Customer_ID, Employee_ID, TicketClass_ID, TicketType, PassengerName)
+-- VALUES (3009, 'VN6515', 10009, 5, 'BC', 'One Way', 'Đặng Văn Lâm');
+-- INSERT INTO TICKET(Ticket_ID, Flight_ID, Customer_ID, Employee_ID, TicketClass_ID, TicketType, PassengerName)
+-- VALUES (3010, 'VN1464', 10010, 7, 'BC', 'Round Trip', 'Bùi Đức Duy');
+
+-- UPDATE TICKET TỰ ĐỘNG TẠO ID
+INSERT INTO TICKET(Flight_ID, Customer_ID, Employee_ID, TicketClass_ID, TicketType, PassengerName)
+VALUES ('VN1464', 10001, 3, 'BC', 'One Way', 'Nguyễn Văn Vở');
+INSERT INTO TICKET(Flight_ID, Customer_ID, Employee_ID, TicketClass_ID, TicketType, PassengerName)
+VALUES ('VN1464', 10002, 3, 'EC', 'Round Trip', 'Nguyễn Văn Chương');
+INSERT INTO TICKET(Flight_ID, Customer_ID, Employee_ID, TicketClass_ID, TicketType, PassengerName)
+VALUES ('VN1376', 10003, 3, 'EC', 'One Way', 'Nguyễn Thị Nở');
+INSERT INTO TICKET(Flight_ID, Customer_ID, Employee_ID, TicketClass_ID, TicketType, PassengerName)
+VALUES ('VN1414', 10004, 5, 'EC', 'Round Trip', 'Hồ Cẩm Đào Hoa');
+INSERT INTO TICKET(Flight_ID, Customer_ID, Employee_ID, TicketClass_ID, TicketType, PassengerName)
+VALUES ('VN212', 10005, 6, 'BC', 'One Way', 'Lê Bá Đạo');
+INSERT INTO TICKET(Flight_ID, Customer_ID, Employee_ID, TicketClass_ID, TicketType, PassengerName)
+VALUES ('VN8204', 10006, 6, 'EC', 'Round Trip', 'Trần Thị Tuyết Mai');
+INSERT INTO TICKET(Flight_ID, Customer_ID, Employee_ID, TicketClass_ID, TicketType, PassengerName)
+VALUES ('VN1660', 10007, 4, 'EC', 'One Way', 'Nguyễn Phong Phú');
+INSERT INTO TICKET(Flight_ID, Customer_ID, Employee_ID, TicketClass_ID, TicketType, PassengerName)
+VALUES ('VN1277', 10008, 4, 'EC', 'Round Trip', 'Bùi Tiến Dũng');
+INSERT INTO TICKET(Flight_ID, Customer_ID, Employee_ID, TicketClass_ID, TicketType, PassengerName)
+VALUES ('VN6515', 10009, 5, 'BC', 'One Way', 'Đặng Văn Lâm');
+INSERT INTO TICKET(Flight_ID, Customer_ID, Employee_ID, TicketClass_ID, TicketType, PassengerName)
+VALUES ('VN1464', 10010, 7, 'BC', 'Round Trip', 'Bùi Đức Duy');
+
+-- UPDATE INVOICE CÓ NHẬP ID
+-- INSERT INTO INVOICE(Invoice_ID, Employee_ID, Customer_ID, EstablishedDate, Total)
+-- VALUES (1000, 1, 10001, '2022/5/20', '1250000');
+-- INSERT INTO INVOICE(Invoice_ID, Employee_ID, Customer_ID, EstablishedDate, Total)
+-- VALUES (1001, 2, 10002, '2022/5/20', '1250000');
+-- INSERT INTO INVOICE(Invoice_ID, Employee_ID, Customer_ID, EstablishedDate, Total)
+-- VALUES (1003, 3, 10003, '2022/5/22', '995000');
+-- INSERT INTO INVOICE(Invoice_ID, Employee_ID, Customer_ID, EstablishedDate, Total)
+-- VALUES (1004, 5, 10004, '2022/5/22', '1250000');
+-- INSERT INTO INVOICE(Invoice_ID, Employee_ID, Customer_ID, EstablishedDate, Total)
+-- VALUES (1005, 6, 10005, '2022/5/26', '1250000');
+-- INSERT INTO INVOICE(Invoice_ID, Employee_ID, Customer_ID, EstablishedDate, Total)
+-- VALUES (1006, 6, 10006, '2022/5/29', '2250000');
+-- INSERT INTO INVOICE(Invoice_ID, Employee_ID, Customer_ID, EstablishedDate, Total)
+-- VALUES (1007, 4, 10007, '2022/6/7', '1000000');
+-- INSERT INTO INVOICE(Invoice_ID, Employee_ID, Customer_ID, EstablishedDate, Total)
+-- VALUES (1008, 4, 10008, '2022/5/29', '850000');
+-- INSERT INTO INVOICE(Invoice_ID, Employee_ID, Customer_ID, EstablishedDate, Total)
+-- VALUES (1009, 5, 10009, '2022/6/1', '3250000');
+-- INSERT INTO INVOICE(Invoice_ID, Employee_ID, Customer_ID, EstablishedDate, Total)
+-- VALUES (1010, 7, 10010, '2022/5/20', '1250000');
+
+-- UPDATE INVOICE TỰ ĐỘNG TẠO ID
+INSERT INTO INVOICE(Employee_ID, Customer_ID, EstablishedDate, Total)
+VALUES (1, 10001, '2022/5/20', '1250000');
+INSERT INTO INVOICE(Employee_ID, Customer_ID, EstablishedDate, Total)
+VALUES (2, 10002, '2022/5/20', '1250000');
+INSERT INTO INVOICE(Employee_ID, Customer_ID, EstablishedDate, Total)
+VALUES (3, 10003, '2022/5/22', '995000');
+INSERT INTO INVOICE(Employee_ID, Customer_ID, EstablishedDate, Total)
+VALUES (5, 10004, '2022/5/22', '1250000');
+INSERT INTO INVOICE(Employee_ID, Customer_ID, EstablishedDate, Total)
+VALUES (6, 10005, '2022/5/26', '1250000');
+INSERT INTO INVOICE(Employee_ID, Customer_ID, EstablishedDate, Total)
+VALUES (6, 10006, '2022/5/29', '2250000');
+INSERT INTO INVOICE(Employee_ID, Customer_ID, EstablishedDate, Total)
+VALUES (4, 10007, '2022/6/7', '1000000');
+INSERT INTO INVOICE(Employee_ID, Customer_ID, EstablishedDate, Total)
+VALUES (4, 10008, '2022/5/29', '850000');
+INSERT INTO INVOICE(Employee_ID, Customer_ID, EstablishedDate, Total)
+VALUES (5, 10009, '2022/6/1', '3250000');
+INSERT INTO INVOICE(Employee_ID, Customer_ID, EstablishedDate, Total)
+VALUES (7, 10010, '2022/5/20', '1250000');
+
+INSERT INTO INVOICEDETAIL(Invoice_ID, Ticket_ID, Quantity) VALUES (1001, 3001,'1');
+INSERT INTO INVOICEDETAIL(Invoice_ID, Ticket_ID, Quantity) VALUES (1002, 3002,'1');
+INSERT INTO INVOICEDETAIL(Invoice_ID, Ticket_ID, Quantity) VALUES (1003, 3003,'1');
+INSERT INTO INVOICEDETAIL(Invoice_ID, Ticket_ID, Quantity) VALUES (1004, 3004,'1');
+INSERT INTO INVOICEDETAIL(Invoice_ID, Ticket_ID, Quantity) VALUES (1005, 3005,'1');
+INSERT INTO INVOICEDETAIL(Invoice_ID, Ticket_ID, Quantity) VALUES (1006, 3006,'1');
+INSERT INTO INVOICEDETAIL(Invoice_ID, Ticket_ID, Quantity) VALUES (1007, 3007,'1');
+INSERT INTO INVOICEDETAIL(Invoice_ID, Ticket_ID, Quantity) VALUES (1008, 3008,'1');
+INSERT INTO INVOICEDETAIL(Invoice_ID, Ticket_ID, Quantity) VALUES (1009, 3009,'1');
+INSERT INTO INVOICEDETAIL(Invoice_ID, Ticket_ID, Quantity) VALUES (1010, 3010,'1');
+
+-- INSERT INTO INVOICEDETAIL(Invoice_ID, Ticket_ID, Quantity) VALUES ('IV011', 'TK011','1');
+-- INSERT INTO INVOICEDETAIL(Invoice_ID, Ticket_ID, Quantity) VALUES ('IV012', 'TK012','1');
+
+-- TEST TABLE 
+SELECT * FROM AIRCRAFT;
+SELECT * FROM AIRPORT;
+SELECT * FROM FLIGHT;
+SELECT * FROM CUSTOMER;
+SELECT * FROM INVOICE;
+SELECT * FROM INVOICEDETAIL;
+SELECT * FROM ACCOUNT;
+SELECT * FROM TICKET;
+SELECT * FROM EMPLOYEE;
+SELECT * FROM TICKETCLASS;
+
+-- DELIMITER $$
+
+-- CREATE TRIGGER after_insert_ticket
+--    AFTER INSERT ON ticket 
+--    FOR EACH ROW 
+-- BEGIN
+--     DECLARE TicketClass VARCHAR(10);
+--     DECLARE ID_FLIGHT VARCHAR(10);
+--     DECLARE msg VARCHAR(128);
+--     SELECT TicketClass = FLIGHT.TicketClass_ID , INSERTED.ID_FLIGHT = FLIGHT.Flight_ID FROM INSERTED, FLIGHT ;
+-- 	IF TicketClass = 'EC'
+--     THEN
+-- 		IF NumberOfEconomySeats = 0
+--         THEN
+-- 			SET msg = CONCAT('The number of business seats are sold');
+-- 				SIGNAL SQLSTATE '45000'
+-- 					SET MESSAGE_TEXT = msg;
+-- 		ELSE
+-- 			UPDATE FLIGHT SET NumberOfEconomySeats = NumbberOfEconomySeats - 1 WHERE FLIGHT.Flight_ID = INSERTED.ID_FLIGHT;
+-- 		END IF;
+-- 	ELSE 
+-- 		IF NumberOfBusinessSeats = 0
+--         THEN
+-- 			SET msg = CONCAT('The number of business seats are sold');
+-- 				SIGNAL SQLSTATE '45000'
+-- 					SET MESSAGE_TEXT = msg;
+-- 		ELSE
+-- 			UPDATE FLIGHT SET NumberOfBusinessSeats = NumbberOfBusinessSeats - 1 WHERE FLIGHT.Flight_ID = INSERTED.ID_FLIGHT;
+-- 		END IF;
+--     END IF;
+-- END$$
+
+DELIMITER $$
+
+CREATE TRIGGER after_insert_ticket
+   AFTER INSERT ON TICKET 
+   FOR EACH ROW 
+BEGIN
+    DECLARE TicketClass VARCHAR(10);
+    DECLARE ID_FLIGHT VARCHAR(10);
+    SELECT TicketClass = FLIGHT.TicketClass_ID , INSERTED.ID_FLIGHT = FLIGHT.Flight_ID FROM INSERTED, FLIGHT ;
+	IF TicketClass = 'EC'
+    THEN
+			UPDATE FLIGHT SET NumberOfEconomySeats = NumberOfEconomySeats - 1 WHERE FLIGHT.Flight_ID = INSERTED.ID_FLIGHT;
+	ELSE 
+			UPDATE FLIGHT SET NumberOfBusinessSeats = NumberOfBusinessSeats - 1 WHERE FLIGHT.Flight_ID = INSERTED.ID_FLIGHT;
+    END IF;													 
+END$$
+
+DELIMITER ;
+
+-- FUNTION TỰ ĐỘNG TĂNG (BỊ LỖI CHƯA FIX RA) 
+-- DELIMITER $$  
+-- CREATE FUNCTION AUTO_IDKH()
+-- RETURNS VARCHAR(10)
+-- BEGIN
+-- 		DECLARE ID VARCHAR(10); 
+--         DECLARE MAX_ID INT;
+-- 		SELECT MAX = COUNT(Customer_ID) + 1 FROM CUSTOMER WHERE Customer_ID LIKE 'KH'
+--         SET ID = 'KH' + RIGHT('0' + CAST(MAX AS VARCHAR(3)), 3)
+--         WHILE(EXISTS(SELECT Customer_ID FROM CUSTOMER WHERE Customer_ID = ID))
+-- 		BEGIN
+-- 			SET MAX = MAX + 1;
+--             SET ID = 'KH' + RIGHT('0' + CAST(MAX AS VARCHAR(3)), 3)
+--         END;
+-- END;
+-- DELIMITER ;
+
+-- DELIMITER $$  
+-- CREATE FUNCTION AUTO_IDKH(ID VARCHAR(10))
+-- RETURNS VARCHAR(10)
+-- BEGIN
+-- 	-- DECLARE ID VARCHAR(10);
+-- 	IF (SELECT COUNT(Customer_ID) FROM CUSTOMER) = 0 
+-- 		SET ID = '0';
+-- 	ELSE 
+-- 		SELECT ID = MAX(RIGHT(Customer_ID, 3)) FROM CUSTOMER;
+-- 		SELECT ID = CASE
+-- 			WHEN ID >= 0 and ID < 9 THEN 'KH00' + CONVERT(CHAR, CONVERT(INT, ID) + 1)
+-- 			WHEN ID >= 9 THEN 'KH0' + CONVERT(CHAR, CONVERT(INT, ID) + 1)
+-- 	END;
+-- 	RETURN ID;
+-- END;
+-- DELIMITER ;
